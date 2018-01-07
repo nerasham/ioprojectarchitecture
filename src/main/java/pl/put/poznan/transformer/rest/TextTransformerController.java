@@ -38,8 +38,8 @@ public class TextTransformerController {
         Node node2=new Node(counter2.incrementAndGet(),"2",NodeType.REGULAR,bIn,bOut);
         Node node3=new Node(counter2.incrementAndGet(),"3",NodeType.REGULAR,cIn,cOut);
         Node node4=new Node(counter2.incrementAndGet(),"4",NodeType.REGULAR,dIn,dOut);
-        Node node5=new Node(counter2.incrementAndGet(),"5",NodeType.EXIT,eIn,eOut);
-        Node node6=new Node(counter2.incrementAndGet(),"6",NodeType.EXIT,fIn,fOut);
+        Node node5=new Node(counter2.incrementAndGet(),"5",NodeType.REGULAR,eIn,eOut);
+        Node node6=new Node(counter2.incrementAndGet(),"6",NodeType.REGULAR,fIn,fOut);
         Node node7=new Node(counter2.incrementAndGet(),"7",NodeType.EXIT,gIn,gOut);
         Node[] nodes={node1,node2,node3,node4,node5,node6,node7};
 
