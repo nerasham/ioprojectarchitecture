@@ -1,11 +1,11 @@
 package pl.put.poznan.transformer.logic;
 
 public class Arc {
-    Node from;
-    Node to;
+    Integer from;
+    Integer to;
     double value;
 
-    public Arc(Node from, Node to, double value) {
+    public Arc(Integer from, Integer to, double value) {
         this.from = from;
         this.to = to;
         this.value = value;
@@ -15,11 +15,11 @@ public class Arc {
         return value;
     }
 
-    public Node getFrom() {
+    public Integer getFrom() {
         return from;
     }
 
-    public Node getTo() {
+    public Integer getTo() {
         return to;
     }
 }

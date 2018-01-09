@@ -7,7 +7,7 @@ import java.util.LinkedList;
  *
  */
 public class Node {
-    Integer id;
+  public   Integer id;
     String name;
     NodeType type;
     LinkedList<Arc> outgoing;
@@ -28,7 +28,8 @@ public class Node {
         this.incoming = incoming;
     }
 
-    /** Znajduje najtańszą ścieżkę w zadanym grafie od węzła, dla którego wykonano metodę, do węzła exit
+    /** Znajduje najtańszą ścieżkę w zadanym grafie od węzła, dla którego wykonano metodę, do węzła exit.
+     * Metoda zakłada, że wszystkie węzły w listach outgoing i incoming węzłów należących do struktury graph znajdują się w tejże strukturze
      * @param graph     Węzły sieci, mapa z identyfikatora węzła na klasę reprezentującą dany węzeł
      * @param exit      Węzeł końcowy w poszukiwanej ścieżce
      * @return          Lista identyfikatorów węzłów na ścieżce oraz sumaryczny koszt
@@ -62,8 +63,9 @@ public class Node {
             Node temp_node = graph.get(temp_id);
 
             for(Arc arc: temp_node.outgoing) {
-                Node successor = arc.to;
+                Node successor = graph.get(arc.to);
                 Double new_distance = distance.get(temp_id) + arc.value;
+                System.out.println(temp_id + " " + successor.id);
                 if(queue.contains(successor.id) && (distance.get(successor.id) > new_distance)){
                     distance.put(successor.id, new_distance);
                     predecessor.put(successor.id, temp_node);
@@ -87,11 +89,11 @@ public class Node {
         double result = 0.;
 
         for(int i=0; i < (path.size()-1); ++i){
-            Node pre = graph.get(path.get(i)),
-                    suc = graph.get(path.get(i+1));
+            Node pre = graph.get(path.get(i));
+            Integer successor_id = path.get(i+1);
             Boolean found = false;
             for(Arc arc : pre.outgoing) {
-                if (arc.to == suc) {
+                if (arc.to == successor_id) {
                     result += arc.value;
                     found = true;
                     break;
@@ -138,7 +140,7 @@ public class Node {
     public void insertToOutgoing(Arc arc) throws Exception {
         if(arc.value < 0.)
             throw new Exception("Value < 0\n");
-        if(arc.from != this)
+        if(arc.from != this.id)
             throw new Exception("Dane połączenie nie jest poprawne\n");
         outgoing.addFirst(arc);
     }
@@ -154,7 +156,7 @@ public class Node {
     public void insertToIncoming(Arc arc) throws Exception {
         if(arc.value < 0.)
             throw new Exception("Value < 0\n");
-        if(arc.to != this)
+        if(arc.to != this.id)
             throw new Exception("Dane połączenie nie jest poprawne\n");
         incoming.addFirst(arc);
     }

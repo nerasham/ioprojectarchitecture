@@ -32,14 +32,14 @@ public class TextTransformerController {
         for(int i=0; i < 10; ++i){
             nodes[i] = new Node(i, "Name"+i, NodeType.ENTRY, new LinkedList<Arc>(), new LinkedList<Arc>());}
 
-//        for(int i=0; i < 10; ++i) {
-//            Integer f = rand.nextInt(10);
-//            Integer s = (f + (rand.nextInt(10) % 9)) % 10;
-//            Double val = rand.nextDouble();
-//            Arc arc = new Arc(nodes[f], nodes[s], val);
-//            nodes[f].insertToOutgoing(arc);
-//            nodes[s].insertToIncoming(arc);
-//        }
+        for(int i=0; i < 10; ++i) {
+            Integer f = rand.nextInt(10);
+            Integer s = (f + (rand.nextInt(10) % 9)) % 10;
+            Double val = rand.nextDouble();
+            Arc arc = new Arc(f, s, val);
+            nodes[f].insertToOutgoing(arc);
+            nodes[s].insertToIncoming(arc);
+        }
     }
 
 
@@ -89,8 +89,12 @@ public class TextTransformerController {
     @RequestMapping(value = "/greedy",method = RequestMethod.GET, produces = "application/json")
     public  LinkedList<Integer> test() throws Exception {
         this.setUp();
-        HashMap<Integer, Node> graph = new HashMap<Integer, Node>();
-        LinkedList<Integer> path = nodes[0].findShortestPathGreedy(graph, nodes[0]);
+        HashMap<Integer, Node> graph10 = new HashMap<Integer, Node>();
+        for(int i=0; i < 10; ++i) {
+            graph10.put(nodes[i].id, nodes[i]);
+        }
+
+        LinkedList<Integer> path = nodes[0].findShortestPathGreedy(graph10, nodes[9]);
         return path;
 
     }

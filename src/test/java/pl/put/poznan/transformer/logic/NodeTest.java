@@ -1,15 +1,15 @@
 package pl.put.poznan.transformer.logic;
 
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import sun.security.ssl.Debug;
+        import org.junit.jupiter.api.BeforeEach;
+        import org.junit.jupiter.api.Test;
+        import sun.security.ssl.Debug;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Random;
+        import java.util.HashMap;
+        import java.util.LinkedList;
+        import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.*;
+        import static org.junit.jupiter.api.Assertions.*;
 
 /** Klasa testująca klasę Node
  *
@@ -32,7 +32,7 @@ class NodeTest {
             Integer f = rand.nextInt(10);
             Integer s = (f + (rand.nextInt(10) % 9)) % 10;
             Double val = rand.nextDouble();
-            Arc arc = new Arc(nodes[f], nodes[s], val);
+            Arc arc = new Arc(f, s, val);
             nodes[f].insertToOutgoing(arc);
             nodes[s].insertToIncoming(arc);
         }
@@ -45,13 +45,20 @@ class NodeTest {
      */
     @Test
     void findShortestPathGreedyTest() throws Exception {
-        HashMap<Integer, Node> graph = new HashMap<Integer, Node>();
+        HashMap<Integer, Node> graph = new HashMap<Integer, Node>(),
+                graph10 = new HashMap<Integer, Node>();
+        Node n = new Node(0, "Name", NodeType.ENTRY, new LinkedList<Arc>(), new LinkedList<Arc>());
 
-        Throwable exception = assertThrows(Exception.class, ()->{nodes[0].findShortestPathGreedy(graph, nodes[0]);});
+        Throwable exception = assertThrows(Exception.class, ()->{n.findShortestPathGreedy(graph, n);});
 
-        graph.put(nodes[0].id, nodes[0]);
-        LinkedList<Integer> path = nodes[0].findShortestPathGreedy(graph, nodes[0]);
-        assertTrue(path.size() == 1 && path.getFirst() == nodes[0].id);
+        graph.put(n.id, n);
+        LinkedList<Integer> path = n.findShortestPathGreedy(graph, n);
+        assertTrue(path.size() == 1 && path.getFirst() == n.id);
+
+
+        for(int i=0; i < 10; ++i) {
+            graph10.put(nodes[i].id, nodes[i]);
+        }
     }
 
 
@@ -64,13 +71,13 @@ class NodeTest {
         Double val = -1.;
 
         for (Arc arc : nodes[0].outgoing){
-            if (arc.to == nodes[1]) {
+            if (arc.to == nodes[1].id) {
                 val = arc.value;
                 break;
             }
         }
         if(val == -1.) {
-            Arc arc = new Arc(nodes[0], nodes[1], 13.);
+            Arc arc = new Arc(nodes[0].id, nodes[1].id, 13.);
             nodes[0].insertToOutgoing(arc);
             nodes[1].insertToIncoming(arc);
             val = 13.;
@@ -92,7 +99,7 @@ class NodeTest {
 
     @Test
     void insertToOutgoingTest() throws Exception {
-        Arc arc = new Arc(nodes[0], nodes[1],-1.);
+        Arc arc = new Arc(nodes[0].id, nodes[1].id,-1.);
         Throwable exception = assertThrows(Exception.class, ()->{nodes[0].insertToOutgoing(arc);});
     }
 
@@ -109,13 +116,13 @@ class NodeTest {
     @Test
     void insertToIncomingTest() throws Exception {
         Node n = new Node(11313133, "Name", NodeType.ENTRY, new LinkedList<Arc>(), new LinkedList<Arc>());
-        Arc new_arc = new Arc(n, nodes[0],1.);
+        Arc new_arc = new Arc(n.id, nodes[0].id,1.);
         Boolean test = false;
 
         nodes[0].insertToIncoming(new_arc);
         for(Arc arc : nodes[0].getIncoming())
         {
-            if(arc.from == n && arc.to == nodes[0]) {
+            if(arc.from == n.id && arc.to == nodes[0].id) {
                 test = true;
                 break;
             }
