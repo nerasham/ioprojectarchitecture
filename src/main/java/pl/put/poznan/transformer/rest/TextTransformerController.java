@@ -27,19 +27,60 @@ public class TextTransformerController {
 
     void setUp() throws Exception {
         Random rand = new Random();
-        nodes = new Node[10];
-        arcs=new Arc[10];
-        for(int i=0; i < 10; ++i){
-            nodes[i] = new Node(i, "Name"+i, NodeType.ENTRY, new LinkedList<Arc>(), new LinkedList<Arc>());}
+        nodes = new Node[5];
+        arcs=new Arc[7];
+//        for(int i=0; i < 10; ++i){
+//            nodes[i] = new Node(i, "Name"+i, NodeType.ENTRY, new LinkedList<Arc>(), new LinkedList<Arc>());}
+//
+//        for(int i=0; i < 10; ++i) {
+//            Integer f = rand.nextInt(10);
+//            Integer s = (f + (rand.nextInt(10) % 9)) % 10;
+//            Double val = rand.nextDouble();
+//            Arc arc = new Arc(f, s, val);
+//            nodes[f].insertToOutgoing(arc);
+//            nodes[s].insertToIncoming(arc);
+//        }
 
-        for(int i=0; i < 10; ++i) {
-            Integer f = rand.nextInt(10);
-            Integer s = (f + (rand.nextInt(10) % 9)) % 10;
-            Double val = rand.nextDouble();
-            Arc arc = new Arc(f, s, val);
-            nodes[f].insertToOutgoing(arc);
-            nodes[s].insertToIncoming(arc);
-        }
+         nodes[0]=new Node(0,"A",NodeType.ENTRY, new LinkedList<Arc>(), new LinkedList<Arc>());
+        nodes[1]=new Node(1,"B",NodeType.REGULAR, new LinkedList<Arc>(), new LinkedList<Arc>());
+        nodes[2]=new Node(2,"C",NodeType.REGULAR, new LinkedList<Arc>(), new LinkedList<Arc>());
+        nodes[3]=new Node(3,"D",NodeType.REGULAR, new LinkedList<Arc>(), new LinkedList<Arc>());
+        nodes[4]=new Node(4,"E",NodeType.EXIT, new LinkedList<Arc>(), new LinkedList<Arc>());
+
+       arcs[0] = new Arc(0, 1, 2);
+        nodes[0].insertToOutgoing( arcs[0]);
+        nodes[1].insertToIncoming( arcs[0]);
+
+          arcs[1] = new Arc(0, 3, 4);
+        nodes[0].insertToOutgoing( arcs[1]);
+        nodes[3].insertToIncoming( arcs[1]);
+          arcs[2] = new Arc(1, 2, 3);
+
+        nodes[1].insertToOutgoing( arcs[2]);
+        nodes[2].insertToIncoming( arcs[2]);
+          arcs[3] = new Arc(1, 3, 3);
+
+        nodes[1].insertToOutgoing( arcs[3]);
+        nodes[3].insertToIncoming( arcs[3]);
+          arcs[4] = new Arc(3, 2, 3);
+
+        nodes[3].insertToOutgoing( arcs[4]);
+        nodes[2].insertToIncoming( arcs[4]);
+          arcs[5] = new Arc(2, 4, 2);
+
+        nodes[2].insertToOutgoing( arcs[5]);
+        nodes[4].insertToIncoming( arcs[5]);
+        arcs[6] = new Arc(3, 4, 4);
+
+        nodes[3].insertToOutgoing( arcs[6]);
+        nodes[4].insertToIncoming( arcs[6]);
+
+
+
+
+
+
+
     }
 
 
@@ -86,15 +127,24 @@ public class TextTransformerController {
         return nodes;
 
     }
+    @RequestMapping(value = "/test2",method = RequestMethod.GET, produces = "application/json")
+    public Jason jason2() throws Exception {
+
+        this.setUp();
+        return new Jason(nodes,arcs);
+
+    }
+
+
     @RequestMapping(value = "/greedy",method = RequestMethod.GET, produces = "application/json")
     public  LinkedList<Integer> test() throws Exception {
         this.setUp();
         HashMap<Integer, Node> graph10 = new HashMap<Integer, Node>();
-        for(int i=0; i < 10; ++i) {
+        for(int i=0; i < 5; ++i) {
             graph10.put(nodes[i].id, nodes[i]);
         }
 
-        LinkedList<Integer> path = nodes[0].findShortestPathGreedy(graph10, nodes[9]);
+        LinkedList<Integer> path = nodes[0].findShortestPathGreedy(graph10, nodes[4]);
         return path;
 
     }

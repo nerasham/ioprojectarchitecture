@@ -6,8 +6,16 @@ import java.util.LinkedList;
 /** Klasa reprezentująca węzeł w sieci
  *
  */
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+
+/** Klasa reprezentująca węzeł w sieci
+ *
+ */
 public class Node {
-  public   Integer id;
+    public Integer id;
     String name;
     NodeType type;
     LinkedList<Arc> outgoing;
@@ -63,9 +71,9 @@ public class Node {
             Node temp_node = graph.get(temp_id);
 
             for(Arc arc: temp_node.outgoing) {
-                Node successor = graph.get(arc.to);
-                Double new_distance = distance.get(temp_id) + arc.value;
-                System.out.println(temp_id + " " + successor.id);
+                Node successor = graph.get(arc.getTo());
+                Double new_distance = distance.get(temp_id) + arc.getValue();
+//                System.out.println(temp_id + " " + successor.id);
                 if(queue.contains(successor.id) && (distance.get(successor.id) > new_distance)){
                     distance.put(successor.id, new_distance);
                     predecessor.put(successor.id, temp_node);
@@ -93,8 +101,8 @@ public class Node {
             Integer successor_id = path.get(i+1);
             Boolean found = false;
             for(Arc arc : pre.outgoing) {
-                if (arc.to == successor_id) {
-                    result += arc.value;
+                if (arc.getTo() == successor_id) {
+                    result += arc.getValue();
                     found = true;
                     break;
                 }
@@ -138,9 +146,9 @@ public class Node {
      * @throws Exception
      */
     public void insertToOutgoing(Arc arc) throws Exception {
-        if(arc.value < 0.)
+        if(arc.getValue() < 0.)
             throw new Exception("Value < 0\n");
-        if(arc.from != this.id)
+        if(arc.getFrom() != this.id)
             throw new Exception("Dane połączenie nie jest poprawne\n");
         outgoing.addFirst(arc);
     }
@@ -154,9 +162,9 @@ public class Node {
      * @throws Exception
      */
     public void insertToIncoming(Arc arc) throws Exception {
-        if(arc.value < 0.)
+        if(arc.getValue() < 0.)
             throw new Exception("Value < 0\n");
-        if(arc.to != this.id)
+        if(arc.getTo() != this.id)
             throw new Exception("Dane połączenie nie jest poprawne\n");
         incoming.addFirst(arc);
     }

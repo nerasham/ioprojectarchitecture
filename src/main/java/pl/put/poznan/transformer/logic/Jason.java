@@ -1,50 +1,22 @@
 package pl.put.poznan.transformer.logic;
 
-import org.json.JSONArray;
-
 import java.util.LinkedList;
 import java.util.Random;
 
 public class Jason {
-    public Integer id;
-    String name;
-    NodeType type;
-    public Object[] outgoing;
-    public Object[] incoming;
-
-    public Jason(Node node) {
-
-        this.id = node.id;
-        this.name = node.name;
-        this.type = node.type;
-
-
-           this.incoming=node.incoming.toArray();
-           this.outgoing=node.incoming.toArray();
-
-
+    public Arc[] arcs;
+    public Node[] nodes;
+    public Jason(Node[] nodes,Arc[] arcs) {
+        this.arcs=arcs;
+        this.nodes=nodes;
 
     }
 
-
-    public String getName() {
-        return name;
+    public Arc[] getArcs() {
+        return arcs;
     }
 
-    public Integer getId() {
-        return id;
+    public Node[] getNodes() {
+        return nodes;
     }
-
-    public NodeType getType() {
-        return type;
-    }
-
-    public Object[] getIncoming() {
-        return incoming;
-    }
-
-    public Object[] getOutgoing() {
-        return outgoing;
-    }
-
 }

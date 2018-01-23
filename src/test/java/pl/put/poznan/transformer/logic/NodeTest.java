@@ -1,19 +1,21 @@
 package pl.put.poznan.transformer.logic;
 
 
-        import org.junit.jupiter.api.BeforeEach;
-        import org.junit.jupiter.api.Test;
-        import sun.security.ssl.Debug;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.*;
+import sun.security.ssl.Debug;
 
-        import java.util.HashMap;
-        import java.util.LinkedList;
-        import java.util.Random;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Random;
 
-        import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /** Klasa testująca klasę Node
  *
  */
+
 class NodeTest {
     Node[] nodes;
 
@@ -128,5 +130,38 @@ class NodeTest {
             }
         };
         assertTrue(test);
+    }
+
+    @Test
+    void testArcClass() throws Exception {
+        Arc mockArc = mock(Arc.class);
+        Node n1 = new Node(1,  "Name", NodeType.ENTRY, new LinkedList<Arc>(), new LinkedList<Arc>());
+        Node n2 = new Node(2,  "Name", NodeType.EXIT, new LinkedList<Arc>(), new LinkedList<Arc>());
+        HashMap<Integer, Node> graph = new HashMap<Integer, Node>();
+
+        graph.put(n1.id, n1);
+        graph.put(n2.id, n2);
+
+        when(mockArc.getValue()).thenReturn(13.);
+        when(mockArc.getFrom()).thenReturn(1);
+        when(mockArc.getTo()).thenReturn(2);
+        mockArc.from = 1;
+        mockArc.to = 2;
+
+        n1.insertToOutgoing(mockArc);
+        verify(mockArc, times(1)).getFrom();
+        verify(mockArc, times(1)).getValue();
+
+        n2.insertToIncoming(mockArc);
+        verify(mockArc, times(1)).getTo();
+        verify(mockArc, times(2)).getValue();
+
+        LinkedList<Integer> path = n1.findShortestPathGreedy(graph, n2);
+        verify(mockArc, times(1)).getFrom();
+        verify(mockArc, times(2)).getTo();
+        verify(mockArc, times(3)).getValue();
+
+        when(mockArc.getValue()).thenThrow(new ArithmeticException("Sprawdza koszt"));
+        Throwable exception = assertThrows(ArithmeticException.class, ()->{n1.computePathCost(graph, path);}, "Sprawdza koszt");
     }
 }
